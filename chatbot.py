@@ -1,38 +1,43 @@
 from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
 import tkinter as tk
 
 # Create the main window
 root = tk.Tk()
-root.title("Textbox Example")
-root.geometry("350x200")
-
-# Function to manipulate text
-def process_input():
-    user_text = entry.get()  # Get text from textbox
-    processed = user_text.upper()  # Example manipulation: convert to uppercase
-    label_result.config(text=f"Processed: {processed}")
+chatbot = ChatBot('Chatty')
+root.title("Simple Tkinter Program")
+root.geometry("300x200")
 
 # Create a label
-label_prompt = tk.Label(root, text="Enter some text:")
-label_prompt.pack(pady=5)
+label = tk.Label(root, text="Hello, Tkinter!", font=("Arial", 14))
+label.pack(pady=20)
 
-# Create a textbox (Entry widget)
-entry = tk.Entry(root, width=30)
-entry.pack(pady=5)
+# Define a function for button click
+def on_click():
+    label.config(text="Button Clicked!")
 
-# Create a button that runs the function
-btn = tk.Button(root, text="Process", command=process_input)
-btn.pack(pady=10)
+trainer = ChatterBotCorpusTrainer(chatbot)
 
-# Create a label to display the result
-label_result = tk.Label(root, text="", font=("Arial", 12))
-label_result.pack(pady=5)
+# Train the chatbot with the English corpus
+trainer.train('chatterbot.corpus.english')
 
-# Run the main event loop
+print("Chatty is ready to talk! Type 'bye' to exit.")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'bye':
+        print("Chatty: Goodbye!")
+        break
+
+    response = chatbot.get_response(user_input)
+    print("Chatty:", response)
+
+
+# Create a button
+button = tk.Button(root, text="Click Me", command=on_click)
+button.pack(pady=10)
+
+# Run the Tkinter event loop
 root.mainloop()
-
-
-
 
 
